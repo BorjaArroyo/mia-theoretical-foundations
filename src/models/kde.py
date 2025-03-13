@@ -4,7 +4,7 @@ import numpy as np
 from cuml import PCA
 from cuml.neighbors import KernelDensity
 
-def estimate_log_density(generator, latent_dim, class_list, x_q, device, n_samples=20000, n_components=4):
+def estimate_log_density(generator, latent_dim, class_list, x_q, device, n_samples=10000, n_components=4):
     """
     Estimate the log density of x_q using RAPIDS-accelerated Kernel Density Estimation (KDE) 
     with samples generated from multiple classes.
@@ -49,7 +49,7 @@ def estimate_log_density(generator, latent_dim, class_list, x_q, device, n_sampl
     x_q_pca = pca.transform(x_q_gpu)
 
     # 🔹 Fit RAPIDS GPU KDE with optimized bandwidth
-    kde = KernelDensity(kernel='gaussian', bandwidth=.5)
+    kde = KernelDensity(kernel='gaussian', bandwidth=1.)
     kde.fit(gen_imgs_pca)
 
     # 🔹 Compute Log Density
